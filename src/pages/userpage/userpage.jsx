@@ -23,17 +23,22 @@ const PageHeader = styled.header`
     display: grid; 
     text-align: center;
     font-size: 30px;
-    grid-template-columns: 1fr 1fr;
+    display: grid; 
+    grid-gap: 1em;
+    width: 100%;
+    grid-template-columns: repeat(auto-fit, 200px);
+    justify-content: center;
 `
 
 const PageBodyWrapper = styled.div`
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    justify-content: center;
     grid-gap: 1em;
 ` 
 
 const PageBody = styled.section`
     background-color: grey;
+    padding: 1em;
     border-radius: 1em;
     font-size: 25px;
 `
@@ -49,7 +54,7 @@ const UserPage = ()=>{
     const {data, loading, error} = useSearchSingleUser(id)
     const userRepos = useUserData(data.repos_url)
     const userOrg = useUserData(data.organizations_url)
-    console.log(userOrg)
+
     if(loading) return (
         <Page>
             <Loading />
@@ -68,20 +73,6 @@ const UserPage = ()=>{
             </PageHeader>
             <PageBodyWrapper>
                 <PageBody>
-                    {userRepos.loading && <Loading />}
-                    {userRepos.error && 'error'}
-                    {userRepos.data && 
-                        <PageSection title='Repositories' textAlign='center'>
-                        {
-                            userRepos.data.map((repo, id)=>(
-                                <RepositoryCard key={id} {...repo}/>
-                            ))
-                        }
-                        </PageSection>
-
-                    }
-                </PageBody>
-                <PageBody>
                     {userOrg.loading && <Loading />}
                     {userOrg.error && 'error'}
                     {userOrg.data && 
@@ -95,6 +86,22 @@ const UserPage = ()=>{
 
                     }
                 </PageBody>
+                
+                <PageBody>
+                    {userRepos.loading && <Loading />}
+                    {userRepos.error && 'error'}
+                    {userRepos.data && 
+                        <PageSection title='Repositories' textAlign='center'>
+                        {
+                            userRepos.data.map((repo, id)=>(
+                                <RepositoryCard key={id} {...repo}/>
+                            ))
+                        }
+                        </PageSection>
+
+                    }
+                </PageBody>
+                
             </PageBodyWrapper>
         </Page>
       
